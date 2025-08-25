@@ -130,17 +130,17 @@ public class WelcomePage extends JFrame {
     }
 
     private void openPatientLogin() {
-        new LoginPageImproved().setVisible(true);
+        new LoginPage().setVisible(true);
         dispose();
     }
 
     private void openDoctorLogin() {
-        new LoginDrPageImproved().setVisible(true);
+        new LoginDrPage().setVisible(true);
         dispose();
     }
 
     private void openAdminLogin() {
-        new LoginAdminPageImproved().setVisible(true);
+        new LoginAdminPage().setVisible(true);
         dispose();
     }
 

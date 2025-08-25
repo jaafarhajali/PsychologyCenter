@@ -203,7 +203,7 @@ public class RegistrationPageImproved extends JFrame {
         backToLoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new LoginPageImproved().setVisible(true);
+                new LoginPage().setVisible(true);
             }
         });
     }
@@ -293,7 +293,7 @@ public class RegistrationPageImproved extends JFrame {
                 clearForm();
                 // Go back to login page
                 setVisible(false);
-                new LoginPageImproved().setVisible(true);
+                new LoginPage().setVisible(true);
             } else {
                 showErrorMessage("Registration failed!");
             }

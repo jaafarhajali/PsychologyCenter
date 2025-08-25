@@ -1,24 +1,24 @@
 import java.sql.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+
 public class PsychologicalAssessment extends JFrame {
-    Connection conn = null;
-    JLabel label_title;
-    JLabel label_instruction;
-    JPanel mainPanel;
-    JPanel questionsPanel;
-    JScrollPane scrollPane;
-    JButton submit_but;
-    JButton back_but;
+    private Connection conn = null;
+    private JLabel titleLabel, instructionLabel, iconLabel, progressLabel;
+    private JPanel mainPanel, headerPanel, questionsPanel, buttonPanel;
+    private JScrollPane scrollPane;
+    private JButton submitButton, backButton;
+    private JProgressBar progressBar;
 
     // Arrays to store question labels and radio button groups
-    JLabel[] questionLabels;
-    ButtonGroup[] buttonGroups;
-    JRadioButton[][] radioButtons;
+    private JLabel[] questionLabels;
+    private ButtonGroup[] buttonGroups;
+    private JRadioButton[][] radioButtons;
 
     // Questions and options
-    String[] questions = {
+    private String[] questions = {
         "1. How do you usually spend your free time?",
         "2. How is your sleep usually?",
         "3. How do you react when facing a problem?",
@@ -41,7 +41,7 @@ public class PsychologicalAssessment extends JFrame {
         "20. Do you sometimes feel your life lacks purpose or meaning?"
     };
 
-    String[][] options = {
+    private String[][] options = {
         {"I often feel tired and want to sleep or rest", "I feel restless and want to move or do many things", "I worry a lot even when relaxing", "My mood swings between very high energy and low mood", "I repeat certain actions or rituals frequently", "I sometimes see or hear things others don't", "I like being the center of attention and expect praise", "I enjoy my free time normally without any problems"},
         {"I sleep a lot but still feel tired", "I have trouble sitting still and often feel energetic", "I have difficulty sleeping because of worries", "I have periods of very little sleep with high energy", "I feel compelled to check things before sleeping", "I sometimes hear voices at night", "I think I deserve special treatment even in my sleep", "My sleep is normal and restful"},
         {"I feel hopeless and avoid thinking about it", "I act impulsively without planning", "I feel anxious and overthink the problem", "I switch between feeling very confident and very low", "I perform rituals to feel in control", "I believe others are controlling or watching me", "I blame others and refuse to accept fault", "I stay calm and look for reasonable solutions"},
@@ -64,133 +64,319 @@ public class PsychologicalAssessment extends JFrame {
         {"Yes, frequently", "Sometimes, and I feel restless", "I worry about my future", "My feelings about this change often", "I perform rituals to feel control", "I feel disconnected from reality", "I feel unique and expect admiration", "No, I have a clear sense of purpose"}
     };
 
-    String[] conditionNames = {
+    private String[] conditionNames = {
         "Depression", "ADHD", "Anxiety", "Bipolar Disorder", "OCD", "Schizophrenia", "Narcissistic Personality Disorder", "Normal"
     };
 
     public PsychologicalAssessment() {
-        super("Psychological Assessment");
-        conn = null;
-        label_title = new JLabel("Psychological Assessment");
-        label_instruction = new JLabel("Please answer the following questions:");
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        questionsPanel = new JPanel();
-        questionsPanel.setLayout(new BoxLayout(questionsPanel, BoxLayout.Y_AXIS));
-        scrollPane = new JScrollPane(questionsPanel);
-        submit_but = new JButton("Submit");
-        back_but = new JButton("Back");
+        initializeComponents();
+        setupLayout();
+        styleComponents();
+        createQuestions();
+        addEventListeners();
+        centerWindow();
+        setVisible(true);
+    }
 
+    private void initializeComponents() {
+        setTitle("Psychological Assessment - Psychology Center");
+        setSize(900, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(true);
+
+        // Header components
+        iconLabel = new JLabel("📝", SwingConstants.CENTER);
+        titleLabel = new JLabel("Psychological Assessment", SwingConstants.CENTER);
+        instructionLabel = new JLabel("Please answer the following questions honestly. Your responses will help us recommend the right specialist for you.", SwingConstants.CENTER);
+        progressLabel = new JLabel("Progress: 0/20 questions answered", SwingConstants.CENTER);
+
+        // Progress bar
+        progressBar = new JProgressBar(0, 20);
+        progressBar.setValue(0);
+        progressBar.setStringPainted(true);
+        progressBar.setString("0/20 completed");
+
+        // Button components
+        submitButton = new JButton("📊 Submit Assessment");
+        backButton = new JButton("← Back");
+
+        // Panel components
+        mainPanel = new JPanel(new BorderLayout());
+        headerPanel = new JPanel();
+        questionsPanel = new JPanel();
+        buttonPanel = new JPanel();
+
+        // Initialize arrays
         questionLabels = new JLabel[20];
         buttonGroups = new ButtonGroup[20];
         radioButtons = new JRadioButton[20][8];
+    }
 
-        createQuestions();
+    private void setupLayout() {
+        // Main panel setup
+        mainPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
+        getContentPane().add(mainPanel);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.add(submit_but);
-        buttonPanel.add(back_but);
+        // Header panel setup
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        headerPanel.setOpaque(false);
+        headerPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+        
+        headerPanel.add(iconLabel);
+        headerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        headerPanel.add(titleLabel);
+        headerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        headerPanel.add(instructionLabel);
+        headerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        headerPanel.add(progressLabel);
+        headerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        headerPanel.add(progressBar);
 
-        mainPanel.add(label_title, BorderLayout.NORTH);
-        mainPanel.add(label_instruction, BorderLayout.BEFORE_FIRST_LINE);
+        // Questions panel setup
+        questionsPanel.setLayout(new BoxLayout(questionsPanel, BoxLayout.Y_AXIS));
+        questionsPanel.setOpaque(false);
+        questionsPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+
+        // Scroll pane for questions
+        scrollPane = new JScrollPane(questionsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setOpaque(false);
+
+        // Button panel setup
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(backButton);
+        buttonPanel.add(submitButton);
+
+        // Add panels to main panel
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+    }
 
-        add(mainPanel);
+    private void styleComponents() {
+        // Background
+        mainPanel.setBackground(new Color(248, 250, 252));
 
-        setSize(800, 600);
-        setResizable(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Header styling
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
+        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        addButtonListeners();
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        titleLabel.setForeground(new Color(52, 152, 219));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        instructionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        instructionLabel.setForeground(new Color(100, 100, 100));
+        instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        progressLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        progressLabel.setForeground(new Color(70, 130, 180));
+        progressLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Progress bar styling
+        progressBar.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        progressBar.setForeground(new Color(46, 204, 113));
+        progressBar.setBackground(new Color(220, 220, 220));
+        progressBar.setMaximumSize(new Dimension(400, 25));
+        progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Button styling
+        styleButton(submitButton, new Dimension(200, 45), new Font("Segoe UI", Font.BOLD, 14), 
+                   new Color(46, 204, 113), Color.WHITE);
+        styleButton(backButton, new Dimension(100, 40), new Font("Segoe UI", Font.BOLD, 12), 
+                   new Color(149, 165, 166), Color.WHITE);
+    }
+
+    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
+        button.setPreferredSize(size);
+        button.setFont(font);
+        button.setBackground(bgColor);
+        button.setForeground(textColor);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(bgColor.brighter());
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(bgColor);
+            }
+        });
     }
 
     private void createQuestions() {
         for (int i = 0; i < 20; i++) {
-            questionLabels[i] = new JLabel("<html><b>" + questions[i] + "</b></html>");
-            questionsPanel.add(questionLabels[i]);
-            questionsPanel.add(Box.createVerticalStrut(10));
+            // Create question panel for better organization
+            JPanel questionPanel = new JPanel();
+            questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
+            questionPanel.setOpaque(false);
+            questionPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
+            ));
+            questionPanel.setBackground(Color.WHITE);
+            questionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionPanel.getPreferredSize().height));
+
+            questionLabels[i] = new JLabel("<html><div style='margin-bottom: 10px;'><b>" + questions[i] + "</b></div></html>");
+            questionLabels[i].setFont(new Font("Segoe UI", Font.BOLD, 14));
+            questionLabels[i].setForeground(new Color(44, 62, 80));
+            questionLabels[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            
+            questionPanel.add(questionLabels[i]);
+            questionPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
             buttonGroups[i] = new ButtonGroup();
+            
             for (int j = 0; j < 8; j++) {
-                radioButtons[i][j] = new JRadioButton("<html>" + options[i][j] + "</html>");
+                radioButtons[i][j] = new JRadioButton("<html><div style='width: 600px;'>" + options[i][j] + "</div></html>");
                 radioButtons[i][j].setActionCommand(String.valueOf(j));
+                radioButtons[i][j].setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                radioButtons[i][j].setForeground(new Color(70, 70, 70));
+                radioButtons[i][j].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
+                radioButtons[i][j].setOpaque(false);
+                radioButtons[i][j].setCursor(new Cursor(Cursor.HAND_CURSOR));
+                
                 buttonGroups[i].add(radioButtons[i][j]);
-                radioButtons[i][j].setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 5));
-                questionsPanel.add(radioButtons[i][j]);
+                questionPanel.add(radioButtons[i][j]);
+                
+                // Add progress tracking
+                radioButtons[i][j].addActionListener(e -> updateProgress());
             }
-            questionsPanel.add(Box.createVerticalStrut(15));
-            questionsPanel.add(new JSeparator());
-            questionsPanel.add(Box.createVerticalStrut(15));
+
+            questionsPanel.add(questionPanel);
+            questionsPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         }
     }
 
-    private void addButtonListeners() {
-        submit_but.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int[] conditionCounts = new int[8];
-                    int answeredQuestions = 0;
-                    for (int i = 0; i < 20; i++) {
-                        for (int j = 0; j < 8; j++) {
-                            if (radioButtons[i][j].isSelected()) {
-                                conditionCounts[j]++;
-                                answeredQuestions++;
-                                break;
-                            }
-                        }
-                    }
-                    if (answeredQuestions < 10) {
-                        JOptionPane.showMessageDialog(PsychologicalAssessment.this,
-                            "Please answer at least 10 questions to get a proper assessment!");
-                        return;
-                    }
-                    int maxCount = 0;
-                    int maxIndex = 7;
-                    for (int i = 0; i < 8; i++) {
-                        if (conditionCounts[i] > maxCount) {
-                            maxCount = conditionCounts[i];
-                            maxIndex = i;
-                        }
-                    }
-                    String suggestedCondition = conditionNames[maxIndex];
-                    conn = DBconnection.getConnection();
-                    String getPatientIdQuery = "select patient_id from patient order by patient_id desc";
-                    Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery(getPatientIdQuery);
-                    int patientId = -1;
-                    if (rs.next()) {
-                        patientId = rs.getInt("patient_id");
-                    }
-                    if (patientId != -1) {
-                        String updateQuery = "update patient set condition_name='" + suggestedCondition + "' where patient_id=" + patientId;
-                        int result = st.executeUpdate(updateQuery);
-                        if (result > 0) {
-                            JOptionPane.showMessageDialog(PsychologicalAssessment.this,
-                                "Assessment completed!\nBased on your answers, we suggest consulting with doctors specializing in: " + suggestedCondition);
-                            setVisible(false);
-                            new DoctorsListPageImproved(suggestedCondition, "assessment").setVisible(true);
-                        } else {
-                            JOptionPane.showMessageDialog(PsychologicalAssessment.this, "Failed to save assessment results!");
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(PsychologicalAssessment.this, "No patient found to update condition!");
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-                    JOptionPane.showMessageDialog(PsychologicalAssessment.this, "Assessment failed: " + ex.getMessage());
+    private void updateProgress() {
+        int answeredQuestions = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (radioButtons[i][j].isSelected()) {
+                    answeredQuestions++;
+                    break;
                 }
             }
+        }
+        
+        progressBar.setValue(answeredQuestions);
+        progressBar.setString(answeredQuestions + "/20 completed");
+        progressLabel.setText("Progress: " + answeredQuestions + "/20 questions answered");
+        
+        // Enable submit button only when at least 10 questions are answered
+        submitButton.setEnabled(answeredQuestions >= 10);
+        if (answeredQuestions >= 10) {
+            submitButton.setBackground(new Color(46, 204, 113));
+        } else {
+            submitButton.setBackground(new Color(189, 195, 199));
+        }
+    }
+
+    private void addEventListeners() {
+        getRootPane().setDefaultButton(submitButton);
+        
+        // Initially disable submit button
+        submitButton.setEnabled(false);
+        submitButton.setBackground(new Color(189, 195, 199));
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                performAssessment();
+            }
         });
-        back_but.addActionListener(new ActionListener() {
+
+        backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new AssessmentPage().setVisible(true);
+                new AssessmentPage();
             }
         });
     }
 
+    private void performAssessment() {
+        try {
+            int[] conditionCounts = new int[8];
+            int answeredQuestions = 0;
+            
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (radioButtons[i][j].isSelected()) {
+                        conditionCounts[j]++;
+                        answeredQuestions++;
+                        break;
+                    }
+                }
+            }
+            
+            if (answeredQuestions < 10) {
+                showErrorMessage("Please answer at least 10 questions to get a proper assessment!");
+                return;
+            }
+            
+            int maxCount = 0;
+            int maxIndex = 7; // Default to "Normal"
+            for (int i = 0; i < 8; i++) {
+                if (conditionCounts[i] > maxCount) {
+                    maxCount = conditionCounts[i];
+                    maxIndex = i;
+                }
+            }
+            
+            String suggestedCondition = conditionNames[maxIndex];
+            
+            // Save to database
+            conn = DBconnection.getConnection();
+            String getPatientIdQuery = "select patient_id from patient order by patient_id desc";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(getPatientIdQuery);
+            int patientId = -1;
+            if (rs.next()) {
+                patientId = rs.getInt("patient_id");
+            }
+            
+            if (patientId != -1) {
+                String updateQuery = "update patient set condition_name='" + suggestedCondition + "' where patient_id=" + patientId;
+                int result = st.executeUpdate(updateQuery);
+                if (result > 0) {
+                    showSuccessMessage("Assessment completed successfully!\n\nBased on your answers, we suggest consulting with doctors specializing in:\n" + 
+                                     suggestedCondition + "\n\nYou will now be redirected to view available specialists.");
+                    setVisible(false);
+                    new DoctorsListPage(suggestedCondition, "assessment").setVisible(true);
+                } else {
+                    showErrorMessage("Failed to save assessment results!");
+                }
+            } else {
+                showErrorMessage("No patient found to update condition!");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+            showErrorMessage("Assessment failed: " + ex.getMessage());
+        }
+    }
+
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Assessment Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showSuccessMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Assessment Complete", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void centerWindow() {
+        setLocationRelativeTo(null);
+    }
+
     public static void main(String[] args) {
-        new PsychologicalAssessment().setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            new PsychologicalAssessment();
+        });
     }
 }
