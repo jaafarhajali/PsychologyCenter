@@ -91,7 +91,7 @@ find_doctors_but.addActionListener(new ActionListener(){
        int result = st.executeUpdate(updateQuery);
        if(result>0){
            setVisible(false);
-           new DoctorsListPage(selectedCondition, "condition").setVisible(true);
+           new DoctorsListPageImproved(selectedCondition, "condition").setVisible(true);
        }else{
            JOptionPane.showMessageDialog(ConditionSelectionPage.this,"Failed to save condition!");
        }

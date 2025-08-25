@@ -169,7 +169,7 @@ public class PsychologicalAssessment extends JFrame {
                             JOptionPane.showMessageDialog(PsychologicalAssessment.this,
                                 "Assessment completed!\nBased on your answers, we suggest consulting with doctors specializing in: " + suggestedCondition);
                             setVisible(false);
-                            new DoctorsListPage(suggestedCondition, "assessment").setVisible(true);
+                            new DoctorsListPageImproved(suggestedCondition, "assessment").setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(PsychologicalAssessment.this, "Failed to save assessment results!");
                         }

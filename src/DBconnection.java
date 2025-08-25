@@ -1,6 +1,6 @@
 import java.sql.*;
 public class DBconnection{
-    static String URL="jdbc:sqlserver://AYA-DESKTOP\\SQLEXPRESS;databaseName=PsychologyCenterDB;encrypt=false;trustServerCertificate=true";
+    static String URL="jdbc:sqlserver://JAAFARHAJALI\\MSSQLSERVER2;databaseName=PsychologyCenterDB;encrypt=false;trustServerCertificate=true";
     static String username="sa";
     static String password="12345";
     public static Connection getConnection(){

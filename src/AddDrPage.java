@@ -159,7 +159,7 @@ save_but.addActionListener(new ActionListener(){
 back_but.addActionListener(new ActionListener(){
  public void actionPerformed(ActionEvent e){
      dispose();
-     new AdminSelectionPage().setVisible(true);
+     new AdminSelectionPageImproved().setVisible(true);
  }
 });
 
