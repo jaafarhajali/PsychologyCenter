@@ -21,7 +21,7 @@ public class DoctorsListPage extends JFrame {
         styleComponents();
         loadDoctorsFromDB();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(700, 600));
     }
 
     private void initializeComponents() {
@@ -85,24 +85,20 @@ public class DoctorsListPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setForeground(new Color(52, 152, 219));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_BLUE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        conditionLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        conditionLabel.setForeground(new Color(46, 204, 113));
+        UIStyleManager.styleLabel(conditionLabel, UIStyleManager.Fonts.TITLE_SMALL, UIStyleManager.Colors.PRIMARY_GREEN);
         conditionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        instructionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        instructionLabel.setForeground(new Color(100, 100, 100));
+        UIStyleManager.styleLabel(instructionLabel, UIStyleManager.Fonts.BODY_LARGE, UIStyleManager.Colors.TEXT_SECONDARY);
         instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Back button styling
-        styleButton(backButton, new Dimension(100, 35), new Font("Segoe UI", Font.BOLD, 12), 
-                   new Color(149, 165, 166), Color.WHITE);
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, new Dimension(100, 35));
     }
 
     private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
@@ -282,9 +278,7 @@ public class DoctorsListPage extends JFrame {
         });
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

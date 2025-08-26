@@ -20,7 +20,7 @@ public class AddDrPage extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(600, 750));
         setVisible(true);
     }
 
@@ -128,84 +128,41 @@ public class AddDrPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setForeground(new Color(46, 204, 113));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_LARGE, UIStyleManager.Colors.PRIMARY_GREEN);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Form styling
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        Color labelColor = new Color(44, 62, 80);
 
         // Style all labels
         JLabel[] labels = {fullNameLabel, emailLabel, phoneLabel, addressLabel, 
                           specialityLabel, feeLabel, passwordLabel};
         for (JLabel label : labels) {
-            label.setFont(labelFont);
-            label.setForeground(labelColor);
+            UIStyleManager.styleLabel(label, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
         }
 
         // Style all text fields
         JTextField[] fields = {fullNameField, emailField, phoneField, addressField, feeField, passwordField};
         for (JTextField field : fields) {
-            styleTextField(field, fieldFont);
+            UIStyleManager.styleTextField(field, UIStyleManager.Dimensions.FIELD_LARGE);
         }
 
         // Dropdown styling
-        specialityDropdown.setFont(fieldFont);
-        specialityDropdown.setPreferredSize(new Dimension(400, 40));
+        specialityDropdown.setFont(UIStyleManager.Fonts.BODY_LARGE);
+        specialityDropdown.setPreferredSize(UIStyleManager.Dimensions.FIELD_LARGE);
         specialityDropdown.setBackground(Color.WHITE);
         specialityDropdown.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
+            BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_MEDIUM, 1),
             BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
 
         // Button styling
-        Dimension primaryButtonSize = new Dimension(150, 45);
-        Dimension secondaryButtonSize = new Dimension(100, 40);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font smallButtonFont = new Font("Segoe UI", Font.BOLD, 12);
-
-        styleButton(saveButton, primaryButtonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(backButton, secondaryButtonSize, smallButtonFont, new Color(149, 165, 166), Color.WHITE);
-        styleButton(logoutButton, secondaryButtonSize, smallButtonFont, new Color(231, 76, 60), Color.WHITE);
-    }
-
-    private void styleTextField(JTextField field, Font font) {
-        field.setFont(font);
-        field.setPreferredSize(new Dimension(400, 40));
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(saveButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_SMALL);
+        UIStyleManager.styleButton(logoutButton, UIStyleManager.Colors.PRIMARY_RED, Color.WHITE, UIStyleManager.Dimensions.BUTTON_SMALL);
     }
 
     private void addEventListeners() {
@@ -327,9 +284,7 @@ public class AddDrPage extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

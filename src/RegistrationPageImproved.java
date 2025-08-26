@@ -19,7 +19,7 @@ public class RegistrationPageImproved extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(500, 700));
     }
 
     private void initializeComponents() {
@@ -124,71 +124,30 @@ public class RegistrationPageImproved extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         logoLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(46, 204, 113));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_GREEN);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Form styling
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        Color labelColor = new Color(44, 62, 80);
-
-        // Style all labels
+        // Form styling - Style all labels
         JLabel[] labels = {fullNameLabel, ageLabel, emailLabel, phoneLabel, passwordLabel, confirmPasswordLabel};
         for (JLabel label : labels) {
-            label.setFont(labelFont);
-            label.setForeground(labelColor);
+            UIStyleManager.styleLabel(label, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
         }
 
         // Style all text fields
         JTextField[] fields = {fullNameField, ageField, emailField, phoneField, passwordField, confirmPasswordField};
         for (JTextField field : fields) {
-            styleTextField(field, fieldFont);
+            UIStyleManager.styleTextField(field, new Dimension(350, 40));
         }
 
         // Button styling
-        Dimension buttonSize = new Dimension(350, 45);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-
-        styleButton(createAccountButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(backToLoginButton, buttonSize, buttonFont, new Color(149, 165, 166), Color.WHITE);
-    }
-
-    private void styleTextField(JTextField field, Font font) {
-        field.setFont(font);
-        field.setPreferredSize(new Dimension(350, 40));
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(createAccountButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, new Dimension(350, 45));
+        UIStyleManager.styleButton(backToLoginButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, new Dimension(350, 45));
     }
 
     private void addEventListeners() {
@@ -203,7 +162,7 @@ public class RegistrationPageImproved extends JFrame {
         backToLoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new LoginPage().setVisible(true);
+                new LoginPage();
             }
         });
     }
@@ -293,7 +252,7 @@ public class RegistrationPageImproved extends JFrame {
                 clearForm();
                 // Go back to login page
                 setVisible(false);
-                new LoginPage().setVisible(true);
+                new LoginPage();
             } else {
                 showErrorMessage("Registration failed!");
             }
@@ -318,10 +277,6 @@ public class RegistrationPageImproved extends JFrame {
 
     private void showSuccessMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void centerWindow() {
-        setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {

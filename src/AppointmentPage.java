@@ -31,7 +31,7 @@ public class AppointmentPage extends JFrame {
         styleComponents();
         loadData();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(550, 650));
     }
 
     public AppointmentPage(int doctorId, String doctorName, double fees, String previousCondition, String previousSource) {
@@ -165,82 +165,42 @@ public class AppointmentPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(52, 152, 219));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_BLUE);
 
         // Form styling
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        Color labelColor = new Color(44, 62, 80);
-
         JLabel[] labels = {patientLabel, doctorLabel, feesLabel, dateLabel, timeLabel};
         for (JLabel label : labels) {
-            label.setFont(labelFont);
-            label.setForeground(labelColor);
+            UIStyleManager.styleLabel(label, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
         }
 
         // Text fields styling
-        styleTextField(patientField, fieldFont);
-        styleTextField(doctorField, fieldFont);
-        styleTextField(feesField, fieldFont);
+        UIStyleManager.styleTextField(patientField, new Dimension(300, 35));
+        UIStyleManager.styleTextField(doctorField, new Dimension(300, 35));
+        UIStyleManager.styleTextField(feesField, new Dimension(300, 35));
 
         // Make doctor and fees fields read-only
         doctorField.setEditable(false);
         feesField.setEditable(false);
-        doctorField.setBackground(new Color(240, 240, 240));
-        feesField.setBackground(new Color(240, 240, 240));
+        doctorField.setBackground(UIStyleManager.Colors.BACKGROUND_CARD);
+        feesField.setBackground(UIStyleManager.Colors.BACKGROUND_CARD);
 
         // Dropdown styling
-        styleDropdown(dateDropdown, fieldFont);
-        styleDropdown(timeDropdown, fieldFont);
+        dateDropdown.setFont(UIStyleManager.Fonts.BODY_LARGE);
+        dateDropdown.setPreferredSize(new Dimension(300, 35));
+        dateDropdown.setBackground(Color.WHITE);
+        dateDropdown.setBorder(BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_MEDIUM, 1));
+        
+        timeDropdown.setFont(UIStyleManager.Fonts.BODY_LARGE);
+        timeDropdown.setPreferredSize(new Dimension(300, 35));
+        timeDropdown.setBackground(Color.WHITE);
+        timeDropdown.setBorder(BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_MEDIUM, 1));
 
         // Button styling
-        Dimension buttonSize = new Dimension(150, 40);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-
-        styleButton(bookButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(backButton, buttonSize, buttonFont, new Color(149, 165, 166), Color.WHITE);
-    }
-
-    private void styleTextField(JTextField field, Font font) {
-        field.setFont(font);
-        field.setPreferredSize(new Dimension(300, 35));
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-            BorderFactory.createEmptyBorder(6, 10, 6, 10)
-        ));
-    }
-
-    private void styleDropdown(JComboBox<String> dropdown, Font font) {
-        dropdown.setFont(font);
-        dropdown.setPreferredSize(new Dimension(300, 35));
-        dropdown.setBackground(Color.WHITE);
-        dropdown.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199), 1));
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(bookButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
     }
 
     private void loadData() {
@@ -378,9 +338,7 @@ public class AppointmentPage extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

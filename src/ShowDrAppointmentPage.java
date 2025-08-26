@@ -22,8 +22,10 @@ public class ShowDrAppointmentPage extends JFrame {
         
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+        
         label_title = new JLabel("Below is the complete list of appointments scheduled for you:");
-        label_title.setFont(new Font("Arial", Font.BOLD, 16));
+        UIStyleManager.styleLabel(label_title, UIStyleManager.Fonts.SUBTITLE, UIStyleManager.Colors.TEXT_PRIMARY);
         panel.add(label_title, BorderLayout.NORTH);
 
         String[] columnNames = {"Patient Name", "Date", "Time"};
@@ -33,11 +35,14 @@ public class ShowDrAppointmentPage extends JFrame {
         
         table = new JTable(data, columnNames);
         table.setEnabled(false);
+        UIStyleManager.styleTable(table);
         scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_LIGHT, 1));
         panel.add(scrollPane, BorderLayout.CENTER);
 
         // Add logout button
         logoutButton = new JButton("Logout");
+        UIStyleManager.styleButton(logoutButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
         logoutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -47,7 +52,7 @@ public class ShowDrAppointmentPage extends JFrame {
         panel.add(logoutButton, BorderLayout.SOUTH);
 
         add(panel, "Center");
-        setSize(600, 400);
+        UIStyleManager.applyWindowConstraints(this, new Dimension(600, 400));
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

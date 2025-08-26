@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
 
 public class WelcomePage extends JFrame {
     private JLabel welcomeLabel, subtitleLabel;
@@ -13,7 +12,7 @@ public class WelcomePage extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(700, 500));
         setVisible(true);
     }
 
@@ -76,47 +75,19 @@ public class WelcomePage extends JFrame {
 
     private void styleComponents() {
         // Background gradient
-        mainPanel.setBackground(new Color(245, 250, 255));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
         
         // Header styling
-        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 36));
-        welcomeLabel.setForeground(new Color(34, 139, 34));
+        UIStyleManager.styleLabel(welcomeLabel, UIStyleManager.Fonts.TITLE_LARGE, UIStyleManager.Colors.PRIMARY_GREEN);
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        subtitleLabel.setForeground(new Color(70, 130, 180));
+        UIStyleManager.styleLabel(subtitleLabel, UIStyleManager.Fonts.SUBTITLE, UIStyleManager.Colors.PRIMARY_BLUE);
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Button styling
-        Dimension buttonSize = new Dimension(250, 50);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 16);
-        
-        styleButton(patientButton, buttonSize, buttonFont, new Color(52, 152, 219), Color.WHITE);
-        styleButton(doctorButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(adminButton, buttonSize, buttonFont, new Color(155, 89, 182), Color.WHITE);
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Add hover effect
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        // Button styling using UIStyleManager
+        UIStyleManager.styleButton(patientButton, UIStyleManager.Colors.PRIMARY_BLUE, Color.WHITE, new Dimension(250, 50));
+        UIStyleManager.styleButton(doctorButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, new Dimension(250, 50));
+        UIStyleManager.styleButton(adminButton, UIStyleManager.Colors.PRIMARY_PURPLE, Color.WHITE, new Dimension(250, 50));
     }
 
     private void addEventListeners() {
@@ -125,12 +96,8 @@ public class WelcomePage extends JFrame {
         adminButton.addActionListener(e -> openAdminLogin());
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
-
     private void openPatientLogin() {
-        new LoginPage().setVisible(true);
+        new LoginPage();
         dispose();
     }
 

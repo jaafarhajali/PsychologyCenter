@@ -86,7 +86,15 @@ public class PsychologicalAssessment extends JFrame {
         radioButtons = new JRadioButton[20][8];
 
         createQuestions();
+        setupLayout();
+        styleComponents();
+        addButtonListeners();
+        
+        UIStyleManager.applyWindowConstraints(this, new Dimension(800, 600));
+        setVisible(true);
+    }
 
+    private void setupLayout() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(submit_but);
@@ -98,30 +106,82 @@ public class PsychologicalAssessment extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
 
-        setSize(800, 600);
-        setResizable(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        addButtonListeners();
+    private void styleComponents() {
+        // Background styling
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+        questionsPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+        
+        // Title and instruction styling
+        UIStyleManager.styleLabel(label_title, UIStyleManager.Fonts.TITLE_LARGE, UIStyleManager.Colors.PRIMARY_BLUE);
+        label_title.setHorizontalAlignment(SwingConstants.CENTER);
+        label_title.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        
+        UIStyleManager.styleLabel(label_instruction, UIStyleManager.Fonts.SUBTITLE, UIStyleManager.Colors.TEXT_SECONDARY);
+        label_instruction.setHorizontalAlignment(SwingConstants.CENTER);
+        label_instruction.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        
+        // Scroll pane styling
+        scrollPane.setBorder(BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_LIGHT, 1));
+        scrollPane.getViewport().setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+        
+        // Button styling
+        UIStyleManager.styleButton(submit_but, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, UIStyleManager.Dimensions.BUTTON_LARGE);
+        UIStyleManager.styleButton(back_but, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
     }
 
     private void createQuestions() {
         for (int i = 0; i < 20; i++) {
+            // Create and style question label
             questionLabels[i] = new JLabel("<html><b>" + questions[i] + "</b></html>");
+            UIStyleManager.styleLabel(questionLabels[i], UIStyleManager.Fonts.TITLE_SMALL, UIStyleManager.Colors.TEXT_PRIMARY);
+            questionLabels[i].setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 20));
             questionsPanel.add(questionLabels[i]);
-            questionsPanel.add(Box.createVerticalStrut(10));
+            
+            questionsPanel.add(Box.createVerticalStrut(5));
             buttonGroups[i] = new ButtonGroup();
+            
+            // Create radio buttons with improved styling
             for (int j = 0; j < 8; j++) {
                 radioButtons[i][j] = new JRadioButton("<html>" + options[i][j] + "</html>");
                 radioButtons[i][j].setActionCommand(String.valueOf(j));
+                radioButtons[i][j].setFont(UIStyleManager.Fonts.BODY_MEDIUM);
+                radioButtons[i][j].setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+                radioButtons[i][j].setForeground(UIStyleManager.Colors.TEXT_PRIMARY);
+                radioButtons[i][j].setBorder(BorderFactory.createEmptyBorder(8, 40, 8, 20));
+                
+                // Add hover effect
+                radioButtons[i][j].addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        JRadioButton button = (JRadioButton)e.getSource();
+                        if (!button.isSelected()) {
+                            button.setBackground(UIStyleManager.Colors.HOVER_BACKGROUND);
+                        }
+                    }
+                    
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        JRadioButton button = (JRadioButton)e.getSource();
+                        if (!button.isSelected()) {
+                            button.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
+                        }
+                    }
+                });
+                
                 buttonGroups[i].add(radioButtons[i][j]);
-                radioButtons[i][j].setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 5));
                 questionsPanel.add(radioButtons[i][j]);
             }
-            questionsPanel.add(Box.createVerticalStrut(15));
-            questionsPanel.add(new JSeparator());
-            questionsPanel.add(Box.createVerticalStrut(15));
+            
+            questionsPanel.add(Box.createVerticalStrut(10));
+            
+            // Add a styled separator
+            JSeparator separator = new JSeparator();
+            separator.setForeground(UIStyleManager.Colors.BORDER_LIGHT);
+            separator.setBackground(UIStyleManager.Colors.BORDER_LIGHT);
+            questionsPanel.add(separator);
+            questionsPanel.add(Box.createVerticalStrut(10));
         }
     }
 
@@ -141,8 +201,8 @@ public class PsychologicalAssessment extends JFrame {
                         }
                     }
                     if (answeredQuestions < 10) {
-                        JOptionPane.showMessageDialog(PsychologicalAssessment.this,
-                            "Please answer at least 10 questions to get a proper assessment!");
+                        UIStyleManager.showErrorMessage(PsychologicalAssessment.this,
+                            "Please answer at least 10 questions to get a proper assessment!", "Incomplete Assessment");
                         return;
                     }
                     int maxCount = 0;
@@ -166,19 +226,20 @@ public class PsychologicalAssessment extends JFrame {
                         String updateQuery = "update patient set condition_name='" + suggestedCondition + "' where patient_id=" + patientId;
                         int result = st.executeUpdate(updateQuery);
                         if (result > 0) {
-                            JOptionPane.showMessageDialog(PsychologicalAssessment.this,
-                                "Assessment completed!\nBased on your answers, we suggest consulting with doctors specializing in: " + suggestedCondition);
+                            UIStyleManager.showSuccessMessage(PsychologicalAssessment.this,
+                                "Assessment completed!\nBased on your answers, we suggest consulting with doctors specializing in: " + suggestedCondition,
+                                "Assessment Complete");
                             setVisible(false);
                             new DoctorsListPage(suggestedCondition, "assessment").setVisible(true);
                         } else {
-                            JOptionPane.showMessageDialog(PsychologicalAssessment.this, "Failed to save assessment results!");
+                            UIStyleManager.showErrorMessage(PsychologicalAssessment.this, "Failed to save assessment results!", "Save Error");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(PsychologicalAssessment.this, "No patient found to update condition!");
+                        UIStyleManager.showErrorMessage(PsychologicalAssessment.this, "No patient found to update condition!", "Patient Error");
                     }
                 } catch (Exception ex) {
                     System.out.println("Error: " + ex.getMessage());
-                    JOptionPane.showMessageDialog(PsychologicalAssessment.this, "Assessment failed: " + ex.getMessage());
+                    UIStyleManager.showErrorMessage(PsychologicalAssessment.this, "Assessment failed: " + ex.getMessage(), "Assessment Error");
                 }
             }
         });
@@ -191,6 +252,8 @@ public class PsychologicalAssessment extends JFrame {
     }
 
     public static void main(String[] args) {
-        new PsychologicalAssessment().setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            new PsychologicalAssessment();
+        });
     }
 }

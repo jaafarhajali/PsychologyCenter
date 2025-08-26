@@ -17,7 +17,7 @@ public class LoginDrPage extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(450, 550));
     }
 
     private void initializeComponents() {
@@ -107,65 +107,25 @@ public class LoginDrPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         doctorIconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         doctorIconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(46, 204, 113));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_GREEN);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Form styling
-        Font labelFont = new Font("Segoe UI", Font.BOLD, 14);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
-        
-        emailLabel.setFont(labelFont);
-        emailLabel.setForeground(new Color(44, 62, 80));
-        passwordLabel.setFont(labelFont);
-        passwordLabel.setForeground(new Color(44, 62, 80));
+        UIStyleManager.styleLabel(emailLabel, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
+        UIStyleManager.styleLabel(passwordLabel, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
 
-        styleTextField(emailField, fieldFont);
-        styleTextField(passwordField, fieldFont);
+        UIStyleManager.styleTextField(emailField, UIStyleManager.Dimensions.FIELD_STANDARD);
+        UIStyleManager.styleTextField(passwordField, UIStyleManager.Dimensions.FIELD_STANDARD);
 
         // Button styling
-        Dimension buttonSize = new Dimension(300, 45);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-
-        styleButton(loginButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(backButton, buttonSize, buttonFont, new Color(149, 165, 166), Color.WHITE);
-    }
-
-    private void styleTextField(JTextField field, Font font) {
-        field.setFont(font);
-        field.setPreferredSize(new Dimension(300, 40));
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(loginButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, UIStyleManager.Dimensions.BUTTON_LARGE);
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_LARGE);
     }
 
     private void addEventListeners() {
@@ -258,9 +218,7 @@ public class LoginDrPage extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Login Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

@@ -2,7 +2,6 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -22,7 +21,7 @@ public class AdminDashboard extends JFrame {
         styleComponents();
         loadData();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(1000, 700));
         setVisible(true);
     }
 
@@ -170,81 +169,44 @@ public class AdminDashboard extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(155, 89, 182));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_PURPLE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Tabbed pane styling
-        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        tabbedPane.setFont(UIStyleManager.Fonts.TITLE_SMALL);
         tabbedPane.setBackground(Color.WHITE);
         
         // Table styling
-        styleTable(doctorsTable);
-        styleTable(patientsTable);
-        styleTable(appointmentsTable);
+        UIStyleManager.styleTable(doctorsTable);
+        UIStyleManager.styleTable(patientsTable);
+        UIStyleManager.styleTable(appointmentsTable);
 
-        // Scroll pane styling
+        // Scroll pane styling (keep custom styling for now)
         styleScrollPane(doctorsScrollPane);
         styleScrollPane(patientsScrollPane);
         styleScrollPane(appointmentsScrollPane);
 
         // Button styling
-        Dimension buttonSize = new Dimension(160, 40);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 12);
-
-        styleButton(addDoctorButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(removeDoctorButton, buttonSize, buttonFont, new Color(231, 76, 60), Color.WHITE);
-        styleButton(refreshButton, buttonSize, buttonFont, new Color(52, 152, 219), Color.WHITE);
-        styleButton(logoutButton, buttonSize, buttonFont, new Color(149, 165, 166), Color.WHITE);
+        UIStyleManager.styleButton(addDoctorButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(removeDoctorButton, UIStyleManager.Colors.PRIMARY_RED, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(refreshButton, UIStyleManager.Colors.PRIMARY_BLUE, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(logoutButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
     }
 
-    private void styleTable(JTable table) {
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        table.setRowHeight(25);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setSelectionBackground(new Color(52, 152, 219, 100));
-        table.setSelectionForeground(Color.BLACK);
-        
-        // Header styling
-        JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        header.setBackground(new Color(52, 152, 219));
-        header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(header.getWidth(), 30));
-    }
+
 
     private void styleScrollPane(JScrollPane scrollPane) {
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
 
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
-    }
+
 
     private void loadData() {
         loadDoctors();
@@ -434,9 +396,7 @@ public class AdminDashboard extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

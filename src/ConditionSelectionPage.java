@@ -16,7 +16,7 @@ public class ConditionSelectionPage extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(550, 500));
         setVisible(true);
     }
 
@@ -109,62 +109,33 @@ public class ConditionSelectionPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setForeground(new Color(52, 152, 219));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_BLUE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        instructionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        instructionLabel.setForeground(new Color(100, 100, 100));
+        UIStyleManager.styleLabel(instructionLabel, UIStyleManager.Fonts.BODY_LARGE, UIStyleManager.Colors.TEXT_SECONDARY);
         instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Form styling
-        selectLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        selectLabel.setForeground(new Color(44, 62, 80));
+        UIStyleManager.styleLabel(selectLabel, UIStyleManager.Fonts.LABEL_FONT, UIStyleManager.Colors.TEXT_PRIMARY);
 
         // Dropdown styling
-        conditionDropdown.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        conditionDropdown.setFont(UIStyleManager.Fonts.BODY_LARGE);
         conditionDropdown.setPreferredSize(new Dimension(400, 40));
         conditionDropdown.setBackground(Color.WHITE);
         conditionDropdown.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
+            BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_MEDIUM, 1),
             BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
 
         // Button styling
-        Dimension buttonSize = new Dimension(300, 45);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 14);
-
-        styleButton(findDoctorsButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(backButton, new Dimension(120, 40), new Font("Segoe UI", Font.BOLD, 12), 
-                   new Color(149, 165, 166), Color.WHITE);
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(findDoctorsButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, new Dimension(300, 45));
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, new Dimension(120, 40));
     }
 
     private void addEventListeners() {
@@ -225,11 +196,7 @@ public class ConditionSelectionPage extends JFrame {
     }
 
     private void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Selection Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void centerWindow() {
-        setLocationRelativeTo(null);
+        UIStyleManager.showErrorMessage(this, message, "Selection Error");
     }
 
     public static void main(String[] args) {

@@ -13,7 +13,7 @@ public class AssessmentPage extends JFrame {
         setupLayout();
         styleComponents();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(650, 500));
         setVisible(true);
     }
 
@@ -82,50 +82,22 @@ public class AssessmentPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 64));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
-        titleLabel.setForeground(new Color(52, 152, 219));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_LARGE, UIStyleManager.Colors.PRIMARY_BLUE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        questionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        questionLabel.setForeground(new Color(70, 130, 180));
+        UIStyleManager.styleLabel(questionLabel, UIStyleManager.Fonts.SUBTITLE, UIStyleManager.Colors.TEXT_SECONDARY);
         questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Button styling
-        Dimension buttonSize = new Dimension(350, 50);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 16);
-
-        styleButton(knowConditionButton, buttonSize, buttonFont, new Color(46, 204, 113), Color.WHITE);
-        styleButton(needAssessmentButton, buttonSize, buttonFont, new Color(52, 152, 219), Color.WHITE);
-        styleButton(backButton, new Dimension(120, 40), new Font("Segoe UI", Font.BOLD, 14), 
-                   new Color(149, 165, 166), Color.WHITE);
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(knowConditionButton, UIStyleManager.Colors.PRIMARY_GREEN, Color.WHITE, new Dimension(350, 50));
+        UIStyleManager.styleButton(needAssessmentButton, UIStyleManager.Colors.PRIMARY_BLUE, Color.WHITE, new Dimension(350, 50));
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, new Dimension(120, 40));
     }
 
     private void addEventListeners() {
@@ -152,10 +124,6 @@ public class AssessmentPage extends JFrame {
                 new WelcomePage();
             }
         });
-    }
-
-    private void centerWindow() {
-        setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {

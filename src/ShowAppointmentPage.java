@@ -2,7 +2,6 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -21,7 +20,7 @@ public class ShowAppointmentPage extends JFrame {
         styleComponents();
         loadAppointments();
         addEventListeners();
-        centerWindow();
+        UIStyleManager.applyWindowConstraints(this, new Dimension(800, 600));
         setVisible(true);
     }
 
@@ -83,62 +82,25 @@ public class ShowAppointmentPage extends JFrame {
 
     private void styleComponents() {
         // Background
-        mainPanel.setBackground(new Color(248, 250, 252));
+        mainPanel.setBackground(UIStyleManager.Colors.BACKGROUND_LIGHT);
 
         // Header styling
         iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(52, 152, 219));
+        UIStyleManager.styleLabel(titleLabel, UIStyleManager.Fonts.TITLE_MEDIUM, UIStyleManager.Colors.PRIMARY_BLUE);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Table styling
-        appointmentsTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        appointmentsTable.setRowHeight(25);
-        appointmentsTable.setGridColor(new Color(230, 230, 230));
-        appointmentsTable.setSelectionBackground(new Color(52, 152, 219, 100));
-        appointmentsTable.setSelectionForeground(Color.BLACK);
-
-        // Header styling
-        JTableHeader header = appointmentsTable.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        header.setBackground(new Color(52, 152, 219));
-        header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(header.getWidth(), 30));
+        UIStyleManager.styleTable(appointmentsTable);
 
         // Scroll pane styling
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        scrollPane.setBorder(BorderFactory.createLineBorder(UIStyleManager.Colors.BORDER_LIGHT, 1));
         scrollPane.getViewport().setBackground(Color.WHITE);
 
         // Button styling
-        Dimension buttonSize = new Dimension(150, 40);
-        Font buttonFont = new Font("Segoe UI", Font.BOLD, 12);
-
-        styleButton(backButton, buttonSize, buttonFont, new Color(149, 165, 166), Color.WHITE);
-        styleButton(refreshButton, buttonSize, buttonFont, new Color(52, 152, 219), Color.WHITE);
-    }
-
-    private void styleButton(JButton button, Dimension size, Font font, Color bgColor, Color textColor) {
-        button.setPreferredSize(size);
-        button.setFont(font);
-        button.setBackground(bgColor);
-        button.setForeground(textColor);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.brighter());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
+        UIStyleManager.styleButton(backButton, UIStyleManager.Colors.TEXT_LIGHT, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
+        UIStyleManager.styleButton(refreshButton, UIStyleManager.Colors.PRIMARY_BLUE, Color.WHITE, UIStyleManager.Dimensions.BUTTON_MEDIUM);
     }
 
     private void loadAppointments() {
@@ -205,9 +167,7 @@ public class ShowAppointmentPage extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void centerWindow() {
-        setLocationRelativeTo(null);
-    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
