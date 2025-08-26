@@ -27,7 +27,7 @@ public class ConditionSelectionPage extends JFrame {
         setResizable(false);
 
         // Header components
-        iconLabel = new JLabel("📋", SwingConstants.CENTER);
+        iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Condition Selection", SwingConstants.CENTER);
         instructionLabel = new JLabel("Please select your condition from the list below:", SwingConstants.CENTER);
 
@@ -47,7 +47,7 @@ public class ConditionSelectionPage extends JFrame {
         conditionDropdown = new JComboBox<>(conditions);
 
         // Button components
-        findDoctorsButton = new JButton("🔍 Find Doctors");
+        findDoctorsButton = new JButton("Find Doctors");
         backButton = new JButton("← Back");
 
         // Panel components

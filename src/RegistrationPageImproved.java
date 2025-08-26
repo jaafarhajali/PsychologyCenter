@@ -29,7 +29,7 @@ public class RegistrationPageImproved extends JFrame {
         setResizable(false);
 
         // Header components
-        logoLabel = new JLabel("👤", SwingConstants.CENTER);
+        logoLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Create New Account", SwingConstants.CENTER);
 
         // Form components

@@ -33,7 +33,7 @@ public class AdminDashboard extends JFrame {
         setResizable(true);
 
         // Header components
-        iconLabel = new JLabel("🏥", SwingConstants.CENTER);
+        iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Psychology Center - Admin Dashboard", SwingConstants.CENTER);
 
         // Initialize table models
@@ -74,10 +74,10 @@ public class AdminDashboard extends JFrame {
         tabbedPane = new JTabbedPane();
 
         // Button components
-        addDoctorButton = new JButton("👨‍⚕️ Add New Doctor");
-        removeDoctorButton = new JButton("🗑️ Remove Doctor");
-        refreshButton = new JButton("🔄 Refresh Data");
-        logoutButton = new JButton("🚪 Logout");
+        addDoctorButton = new JButton("Add New Doctor");
+        removeDoctorButton = new JButton("Remove Doctor");
+        refreshButton = new JButton("Refresh Data");
+        logoutButton = new JButton("Logout");
 
         // Panel components
         mainPanel = new JPanel(new BorderLayout());
@@ -100,9 +100,9 @@ public class AdminDashboard extends JFrame {
         headerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // Setup tabbed pane
-        tabbedPane.addTab("👨‍⚕️ Doctors", createDoctorsPanel());
-        tabbedPane.addTab("👤 Patients", createPatientsPanel());
-        tabbedPane.addTab("📅 Appointments", createAppointmentsPanel());
+        tabbedPane.addTab("Doctors", createDoctorsPanel());
+        tabbedPane.addTab("Patients", createPatientsPanel());
+        tabbedPane.addTab("Appointments", createAppointmentsPanel());
 
         // Content panel setup
         contentPanel.setLayout(new BorderLayout());

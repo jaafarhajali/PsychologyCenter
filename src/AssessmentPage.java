@@ -24,7 +24,7 @@ public class AssessmentPage extends JFrame {
         setResizable(false);
 
         // Header components
-        iconLabel = new JLabel("🧠", SwingConstants.CENTER);
+        iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Assessment Choice", SwingConstants.CENTER);
         questionLabel = new JLabel("<html><div style='text-align: center;'>" +
             "Do you already know the condition (diagnosis)<br>" +
@@ -33,8 +33,8 @@ public class AssessmentPage extends JFrame {
             "</div></html>", SwingConstants.CENTER);
 
         // Button components
-        knowConditionButton = new JButton("📋 I already know the condition");
-        needAssessmentButton = new JButton("🔍 I need an assessment");
+        knowConditionButton = new JButton("I already know the condition");
+        needAssessmentButton = new JButton("I need an assessment");
         backButton = new JButton("← Back");
 
         // Panel components

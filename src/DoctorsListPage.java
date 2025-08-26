@@ -31,7 +31,7 @@ public class DoctorsListPage extends JFrame {
         setResizable(true);
 
         // Header components
-        titleLabel = new JLabel("👨‍⚕️ Available Doctors", SwingConstants.CENTER);
+        titleLabel = new JLabel("Available Doctors", SwingConstants.CENTER);
         conditionLabel = new JLabel("Specialists for: " + selectedCondition, SwingConstants.CENTER);
         instructionLabel = new JLabel("Select a doctor to book an appointment", SwingConstants.CENTER);
 
@@ -193,25 +193,25 @@ public class DoctorsListPage extends JFrame {
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Speciality
-        JLabel specialityLabel = new JLabel("🎯 Speciality: " + speciality);
+        JLabel specialityLabel = new JLabel("Speciality: " + speciality);
         specialityLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         specialityLabel.setForeground(new Color(100, 100, 100));
         specialityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Phone
-        JLabel phoneLabel = new JLabel("📞 Phone: " + (phone != null ? phone : "Not available"));
+        JLabel phoneLabel = new JLabel("Phone: " + (phone != null ? phone : "Not available"));
         phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         phoneLabel.setForeground(new Color(100, 100, 100));
         phoneLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Address
-        JLabel addressLabel = new JLabel("📍 Address: " + (address != null ? address : "Not available"));
+        JLabel addressLabel = new JLabel("Address: " + (address != null ? address : "Not available"));
         addressLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         addressLabel.setForeground(new Color(100, 100, 100));
         addressLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Fees
-        JLabel feesLabel = new JLabel("💰 Consultation Fee: $" + fees);
+        JLabel feesLabel = new JLabel("Consultation Fee: $" + fees);
         feesLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         feesLabel.setForeground(new Color(46, 204, 113));
         feesLabel.setAlignmentX(Component.LEFT_ALIGNMENT);

@@ -47,7 +47,7 @@ public class AppointmentPage extends JFrame {
         setResizable(false);
 
         // Header components
-        titleLabel = new JLabel("📅 Book Your Appointment", SwingConstants.CENTER);
+        titleLabel = new JLabel("Book Your Appointment", SwingConstants.CENTER);
 
         // Form components
         patientLabel = new JLabel("Patient Name:");
@@ -64,7 +64,7 @@ public class AppointmentPage extends JFrame {
         timeDropdown = new JComboBox<>();
 
         // Button components
-        bookButton = new JButton("📋 Book Appointment");
+        bookButton = new JButton("Book Appointment");
         backButton = new JButton("← Back");
 
         // Panel components

@@ -32,7 +32,7 @@ public class ShowAppointmentPage extends JFrame {
         setResizable(true);
 
         // Header components
-        iconLabel = new JLabel("📅", SwingConstants.CENTER);
+        iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("All Scheduled Appointments", SwingConstants.CENTER);
 
         // Table setup
@@ -48,7 +48,7 @@ public class ShowAppointmentPage extends JFrame {
 
         // Button components
         backButton = new JButton("← Back to Dashboard");
-        refreshButton = new JButton("🔄 Refresh");
+        refreshButton = new JButton("Refresh");
 
         // Panel components
         mainPanel = new JPanel(new BorderLayout());

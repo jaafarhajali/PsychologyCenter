@@ -27,7 +27,7 @@ public class LoginDrPage extends JFrame {
         setResizable(false);
 
         // Header components
-        doctorIconLabel = new JLabel("👨‍⚕️", SwingConstants.CENTER);
+        doctorIconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Doctor Portal", SwingConstants.CENTER);
 
         // Form components

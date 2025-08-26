@@ -27,7 +27,7 @@ public class LoginPage extends JFrame {
         setResizable(false);
 
         // Header components
-        logoLabel = new JLabel("🏥", SwingConstants.CENTER);
+        logoLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Patient Login", SwingConstants.CENTER);
 
         // Form components

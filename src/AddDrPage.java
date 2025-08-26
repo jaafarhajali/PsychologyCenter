@@ -31,7 +31,7 @@ public class AddDrPage extends JFrame {
         setResizable(false);
 
         // Header components
-        iconLabel = new JLabel("👨‍⚕️", SwingConstants.CENTER);
+        iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Add New Doctor", SwingConstants.CENTER);
 
         // Form components
@@ -57,9 +57,9 @@ public class AddDrPage extends JFrame {
         specialityDropdown = new JComboBox<>(specialities);
 
         // Button components
-        saveButton = new JButton("💾 Save Doctor");
+        saveButton = new JButton("Save Doctor");
         backButton = new JButton("← Back");
-        logoutButton = new JButton("🚪 Logout");
+        logoutButton = new JButton("Logout");
 
         // Panel components
         mainPanel = new JPanel(new BorderLayout());

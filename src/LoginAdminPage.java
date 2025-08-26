@@ -27,7 +27,7 @@ public class LoginAdminPage extends JFrame {
         setResizable(false);
 
         // Header components
-        adminIconLabel = new JLabel("⚙️", SwingConstants.CENTER);
+        adminIconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Admin Portal", SwingConstants.CENTER);
 
         // Form components
