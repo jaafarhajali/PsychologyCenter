@@ -52,9 +52,12 @@ public class ShowDrAppointmentPage extends JFrame {
         panel.add(logoutButton, BorderLayout.SOUTH);
 
         add(panel, "Center");
-        UIStyleManager.applyWindowConstraints(this, new Dimension(600, 400));
+        
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
 

@@ -16,12 +16,15 @@ public class DoctorsListPage extends JFrame {
         this.selectedCondition = condition;
         this.previousSource = source;
         
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         loadDoctorsFromDB();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(700, 600));
+        setVisible(true);
     }
 
     private void initializeComponents() {

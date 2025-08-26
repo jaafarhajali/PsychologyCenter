@@ -16,12 +16,14 @@ public class AdminDashboard extends JFrame {
     private DefaultTableModel doctorsModel, patientsModel, appointmentsModel;
 
     public AdminDashboard() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         loadData();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(1000, 700));
         setVisible(true);
     }
 

@@ -12,11 +12,13 @@ public class ConditionSelectionPage extends JFrame {
     private JButton findDoctorsButton, backButton;
 
     public ConditionSelectionPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(550, 500));
         setVisible(true);
     }
 

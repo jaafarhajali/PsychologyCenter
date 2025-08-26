@@ -90,7 +90,8 @@ public class PsychologicalAssessment extends JFrame {
         styleComponents();
         addButtonListeners();
         
-        UIStyleManager.applyWindowConstraints(this, new Dimension(800, 600));
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
     }
 

@@ -26,12 +26,15 @@ public class AppointmentPage extends JFrame {
         this.previousCondition = "General";
         this.previousSource = "condition";
         
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         loadData();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(550, 650));
+        setVisible(true);
     }
 
     public AppointmentPage(int doctorId, String doctorName, double fees, String previousCondition, String previousSource) {

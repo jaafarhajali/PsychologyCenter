@@ -13,11 +13,13 @@ public class LoginPage extends JFrame {
     private JPanel mainPanel, formPanel, buttonPanel, headerPanel;
 
     public LoginPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(450, 600));
         setVisible(true);
     }
 
@@ -133,15 +135,24 @@ public class LoginPage extends JFrame {
 
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                new RegistrationPageImproved();
+                try {
+                    RegistrationPage registrationPage = new RegistrationPage();
+                    registrationPage.setExtendedState(JFrame.MAXIMIZED_BOTH); // Full screen
+                    dispose(); // Close current window
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(LoginPage.this, 
+                        "Error opening registration page: " + ex.getMessage(), 
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
             }
         });
 
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                new WelcomePage();
+                WelcomePage welcomePage = new WelcomePage();
+                welcomePage.setExtendedState(JFrame.MAXIMIZED_BOTH); // Full screen
+                dispose(); // Close current window
             }
         });
     }

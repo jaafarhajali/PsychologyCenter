@@ -4,7 +4,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class RegistrationPageImproved extends JFrame {
+public class RegistrationPage extends JFrame {
     private Connection conn = null;
     private JLabel titleLabel, logoLabel;
     private JLabel fullNameLabel, ageLabel, emailLabel, phoneLabel, passwordLabel, confirmPasswordLabel;
@@ -14,12 +14,15 @@ public class RegistrationPageImproved extends JFrame {
     private JPanel mainPanel, formPanel, buttonPanel, headerPanel;
     private JScrollPane scrollPane;
 
-    public RegistrationPageImproved() {
+    public RegistrationPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(500, 700));
+        setVisible(true); // Make sure the window is visible
     }
 
     private void initializeComponents() {
@@ -161,8 +164,9 @@ public class RegistrationPageImproved extends JFrame {
 
         backToLoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                new LoginPage();
+                LoginPage loginPage = new LoginPage();
+                loginPage.setExtendedState(JFrame.MAXIMIZED_BOTH); // Full screen
+                dispose(); // Close current window
             }
         });
     }
@@ -281,7 +285,7 @@ public class RegistrationPageImproved extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new RegistrationPageImproved().setVisible(true);
+            new RegistrationPage().setVisible(true);
         });
     }
 }

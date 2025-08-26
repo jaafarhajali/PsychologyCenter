@@ -16,11 +16,13 @@ public class AddDrPage extends JFrame {
     private JScrollPane scrollPane;
 
     public AddDrPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(600, 750));
         setVisible(true);
     }
 

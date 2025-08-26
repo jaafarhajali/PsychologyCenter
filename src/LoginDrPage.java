@@ -13,11 +13,14 @@ public class LoginDrPage extends JFrame {
     private JPanel mainPanel, formPanel, buttonPanel, headerPanel;
 
     public LoginDrPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(450, 550));
+        setVisible(true);
     }
 
     private void initializeComponents() {

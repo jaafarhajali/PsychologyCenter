@@ -15,12 +15,14 @@ public class ShowAppointmentPage extends JFrame {
     private DefaultTableModel tableModel;
 
     public ShowAppointmentPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         loadAppointments();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(800, 600));
         setVisible(true);
     }
 

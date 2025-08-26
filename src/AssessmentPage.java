@@ -9,11 +9,13 @@ public class AssessmentPage extends JFrame {
     private JButton knowConditionButton, needAssessmentButton, backButton;
 
     public AssessmentPage() {
+        // Set full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         initializeComponents();
         setupLayout();
         styleComponents();
         addEventListeners();
-        UIStyleManager.applyWindowConstraints(this, new Dimension(650, 500));
         setVisible(true);
     }
 
