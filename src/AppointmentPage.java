@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import javax.swing.Timer;
 
 public class AppointmentPage extends JFrame {
     private Connection conn = null;
@@ -255,19 +256,74 @@ public class AppointmentPage extends JFrame {
 
     private void loadTimeSlots() {
         timeDropdown.removeAllItems();
-        String[] times = {
-            "Select time...",
+        timeDropdown.addItem("Select time...");
+        
+        String[] allTimes = {
             "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM",
             "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"
         };
         
-        for (String time : times) {
-            timeDropdown.addItem(time);
+        // Get selected date to filter available times
+        String selectedDate = (String) dateDropdown.getSelectedItem();
+        int availableSlots = 0;
+        
+        for (String time : allTimes) {
+            // Only add time slot if it's available for this doctor on the selected date
+            if (selectedDate != null && !selectedDate.equals("Select date...")) {
+                if (isTimeSlotAvailable(selectedDate, time)) {
+                    timeDropdown.addItem(time);
+                    availableSlots++;
+                }
+            } else {
+                // If no date selected, show all times
+                timeDropdown.addItem(time);
+                availableSlots++;
+            }
+        }
+        
+        // If no slots available for selected date, show message
+        if (selectedDate != null && !selectedDate.equals("Select date...") && availableSlots == 0) {
+            timeDropdown.addItem("No available slots for this date");
+            timeDropdown.setEnabled(false);
+        } else {
+            timeDropdown.setEnabled(true);
+        }
+    }
+
+    private boolean isTimeSlotAvailable(String date, String time) {
+        try {
+            conn = DBconnection.getConnection();
+            String dbTime = convertTimeForDB(time);
+            
+            // Check if this time slot is already taken by this doctor
+            String query = "SELECT COUNT(*) as count FROM appointment WHERE doctor_id = ? AND appointment_date = ? AND appointment_time = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, doctorId);
+            pstmt.setString(2, date);
+            pstmt.setString(3, dbTime);
+            
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("count") == 0; // Available if count is 0
+            }
+            return true; // Default to available if query fails
+            
+        } catch (Exception ex) {
+            System.out.println("Error checking time slot availability: " + ex.getMessage());
+            return true; // Default to available on error
         }
     }
 
     private void addEventListeners() {
         getRootPane().setDefaultButton(bookButton);
+
+        // Add listener to date dropdown to refresh time slots when date changes
+        dateDropdown.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Refresh time slots when date changes
+                loadTimeSlots();
+            }
+        });
 
         bookButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -294,8 +350,19 @@ public class AppointmentPage extends JFrame {
                 return;
             }
             
+            // Check if no slots are available message is selected
+            if ("No available slots for this date".equals(selectedTime)) {
+                showErrorMessage("No available time slots for the selected date. Please choose a different date.");
+                return;
+            }
+            
             conn = DBconnection.getConnection();
             String dbTime = convertTimeForDB(selectedTime);
+            
+            // Check for conflicts and duplications before booking
+            if (checkAppointmentConflicts(selectedDate, dbTime)) {
+                return; // Error message already shown in the check method
+            }
             
             String query = "INSERT INTO appointment (appointment_date, appointment_time, doctor_id, patient_id) VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -307,8 +374,10 @@ public class AppointmentPage extends JFrame {
             int result = pstmt.executeUpdate();
             
             if (result > 0) {
-                showSuccessMessage("Appointment booked successfully!");
+                showSuccessMessage("Appointment booked successfully!\nYou will now be taken to the assessment page to help us better understand your needs.");
                 clearForm();
+                // Redirect to assessment page after successful booking
+                redirectToAssessment();
             } else {
                 showErrorMessage("Failed to book appointment!");
             }
@@ -316,6 +385,100 @@ public class AppointmentPage extends JFrame {
             System.out.println("Error: " + ex.getMessage());
             showErrorMessage("Booking failed: " + ex.getMessage());
         }
+    }
+
+    private boolean checkAppointmentConflicts(String selectedDate, String selectedTime) {
+        try {
+            // Check 1: Doctor time conflict - Same doctor, same date and time
+            if (checkDoctorTimeConflict(selectedDate, selectedTime)) {
+                showErrorMessage("Time conflict! This doctor already has an appointment at " + 
+                               convertTimeForDisplay(selectedTime) + " on " + selectedDate + 
+                               ".\nPlease select a different time slot.");
+                return true;
+            }
+            
+            // Check 2: Patient duplicate appointment - Same patient, same date (regardless of time)
+            if (checkPatientDuplicateAppointment(selectedDate)) {
+                showErrorMessage("Duplicate appointment! You already have an appointment scheduled on " + selectedDate + 
+                               ".\nPlease select a different date or cancel your existing appointment first.");
+                return true;
+            }
+            
+            // Check 3: Patient time conflict - Same patient, same date and time with different doctor
+            if (checkPatientTimeConflict(selectedDate, selectedTime)) {
+                showErrorMessage("Time conflict! You already have an appointment at " + 
+                               convertTimeForDisplay(selectedTime) + " on " + selectedDate + 
+                               " with another doctor.\nPlease select a different time slot.");
+                return true;
+            }
+            
+            return false; // No conflicts found
+            
+        } catch (Exception ex) {
+            System.out.println("Error checking conflicts: " + ex.getMessage());
+            showErrorMessage("Error checking appointment conflicts. Please try again.");
+            return true; // Return true to prevent booking on error
+        }
+    }
+
+    private boolean checkDoctorTimeConflict(String date, String time) throws Exception {
+        String query = "SELECT COUNT(*) as conflict_count FROM appointment WHERE doctor_id = ? AND appointment_date = ? AND appointment_time = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, doctorId);
+        pstmt.setString(2, date);
+        pstmt.setString(3, time);
+        
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("conflict_count") > 0;
+        }
+        return false;
+    }
+
+    private boolean checkPatientDuplicateAppointment(String date) throws Exception {
+        String query = "SELECT COUNT(*) as duplicate_count FROM appointment WHERE patient_id = ? AND appointment_date = ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, patientId);
+        pstmt.setString(2, date);
+        
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("duplicate_count") > 0;
+        }
+        return false;
+    }
+
+    private boolean checkPatientTimeConflict(String date, String time) throws Exception {
+        String query = "SELECT COUNT(*) as conflict_count FROM appointment WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND doctor_id != ?";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        pstmt.setInt(1, patientId);
+        pstmt.setString(2, date);
+        pstmt.setString(3, time);
+        pstmt.setInt(4, doctorId);
+        
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("conflict_count") > 0;
+        }
+        return false;
+    }
+
+    private String convertTimeForDisplay(String dbTime) {
+        // Convert database time format back to display format
+        if (dbTime.contains(":")) {
+            String[] parts = dbTime.split(":");
+            int hour = Integer.parseInt(parts[0]);
+            if (hour == 0) {
+                return "12:00 AM";
+            } else if (hour < 12) {
+                return hour + ":00 AM";
+            } else if (hour == 12) {
+                return "12:00 PM";
+            } else {
+                return (hour - 12) + ":00 PM";
+            }
+        }
+        return dbTime;
     }
 
     private String convertTimeForDB(String time) {
@@ -339,6 +502,20 @@ public class AppointmentPage extends JFrame {
 
     private void showSuccessMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void redirectToAssessment() {
+        // Add a small delay to let user read the success message
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Close current appointment page and open assessment page
+                setVisible(false);
+                new AssessmentPage("appointment");
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
 
