@@ -7,8 +7,14 @@ public class AssessmentPage extends JFrame {
     private JLabel titleLabel, questionLabel, iconLabel;
     private JPanel mainPanel, headerPanel, buttonPanel;
     private JButton knowConditionButton, needAssessmentButton, backButton;
+    private String sourceLocation; // Track where user came from
 
     public AssessmentPage() {
+        this("welcome"); // Default source is welcome page
+    }
+
+    public AssessmentPage(String sourceLocation) {
+        this.sourceLocation = sourceLocation;
         // Set full screen mode
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         
@@ -28,11 +34,23 @@ public class AssessmentPage extends JFrame {
         // Header components
         iconLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel = new JLabel("Assessment Choice", SwingConstants.CENTER);
-        questionLabel = new JLabel("<html><div style='text-align: center;'>" +
-            "Do you already know the condition (diagnosis)<br>" +
-            "or would you like to answer a short assessment<br>" +
-            "to help us suggest the right doctor for you?" +
-            "</div></html>", SwingConstants.CENTER);
+        
+        // Dynamic question based on source
+        String questionText = "<html><div style='text-align: center;'>";
+        if ("appointment".equals(sourceLocation)) {
+            questionText += "Your appointment has been booked successfully!<br><br>" +
+                          "To help us prepare better for your visit, please let us know:<br>" +
+                          "Do you already know the condition (diagnosis)<br>" +
+                          "or would you like to answer a short assessment<br>" +
+                          "to help us suggest additional care options?";
+        } else {
+            questionText += "Do you already know the condition (diagnosis)<br>" +
+                          "or would you like to answer a short assessment<br>" +
+                          "to help us suggest the right doctor for you?";
+        }
+        questionText += "</div></html>";
+        
+        questionLabel = new JLabel(questionText, SwingConstants.CENTER);
 
         // Button components
         knowConditionButton = new JButton("I already know the condition");
@@ -121,9 +139,15 @@ public class AssessmentPage extends JFrame {
 
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Go back to welcome page
+                // Go back based on source location
                 setVisible(false);
-                new WelcomePage();
+                if ("appointment".equals(sourceLocation)) {
+                    // If coming from appointment booking, show patient appointments
+                    new ShowAppointmentPage().setVisible(true);
+                } else {
+                    // Default: go back to welcome page
+                    new WelcomePage();
+                }
             }
         });
     }
