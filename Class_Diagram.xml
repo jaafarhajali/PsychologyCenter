@@ -41,7 +41,11 @@
           <mxGeometry y="88" width="200" height="92" as="geometry" />
         </mxCell>
         <mxCell id="appointment-class" value="Appointment" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+<<<<<<< HEAD
           <mxGeometry x="180" y="380" width="200" height="260" as="geometry" />
+=======
+          <mxGeometry x="180" y="380" width="200" height="220" as="geometry" />
+>>>>>>> f3c2cb23dc71c6eaba665155e3ded20c8312cc5a
         </mxCell>
         <mxCell id="appointment-attributes" value="- appointment_id: int&#xa;- patient_id: int&#xa;- doctor_id: int&#xa;- appointment_date: Date&#xa;- appointment_time: Time&#xa;- status: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="appointment-class" vertex="1">
           <mxGeometry y="26" width="200" height="94" as="geometry" />
@@ -50,7 +54,11 @@
           <mxGeometry y="120" width="200" height="8" as="geometry" />
         </mxCell>
         <mxCell id="appointment-methods" value="+ createAppointment(): boolean&#xa;+ cancelAppointment(): boolean&#xa;+ rescheduleAppointment(): boolean&#xa;+ confirmAppointment(): boolean&#xa;+ getAppointmentDetails(): String&#xa;+ updateStatus(): boolean&#xa;+ checkConflicts(): boolean&#xa;+ validateTimeSlot(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="appointment-class" vertex="1">
+<<<<<<< HEAD
           <mxGeometry y="128" width="200" height="132" as="geometry" />
+=======
+          <mxGeometry y="128" width="200" height="92" as="geometry" />
+>>>>>>> f3c2cb23dc71c6eaba665155e3ded20c8312cc5a
         </mxCell>
         <mxCell id="assessment-class" value="PsychologicalAssessment" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="450" y="380" width="200" height="200" as="geometry" />
